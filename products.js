@@ -81,38 +81,28 @@ const products = [
   {
     name: "Redecan CBD Reign Drops",
     type: "blend",
-    price: 36.15,
+    price: 16.55,
     category: "Oils and Sprays",
-    tags: ["oils", "cbd"],
-    cbd: 13.6,
-    desc: "Redecan | 30ml | THC: 0.3mg/ml | CBD: 13.6mg/ml",
+    tags: ["oil", "cbd", "drops"],
+    desc: "Redecan | 30ml | THC: 57mg | CBD: 384–471mg. Formulated in Niagara with CO2-extracted oil from greenhouse-grown plants. High CBD, low THC, for ingestion only.",
     img: "https://oneplant-new-waio-app.b-cdn.net/media/f/b5/09/23/7d/b509237d-3adf-47f9-ae0f-bd701b74312a.jpg"
   },
   {
-    name: "Mollo 10",
+    name: "CBD GEMS + 15 caps",
+    type: "blend",
+    price: 36.15,
+    category: "Capsules",
+    tags: ["capsules", "cbd"],
+    desc: "30mg CBD per cap. CO2-extracted oil, blended strains, MCT carrier. High CBD potency.",
+    img: "https://oneplant-new-waio-app.b-cdn.net/media/f/69/b8/e3/8b/69b8e38b-7f3f-4f2b-8d6b-098f75b4b2b3.jpg"
+  },
+  {
+    name: "Gems 5:0 Capsules",
     type: "hybrid",
-    price: 4.95,
-    category: "Beverages",
-    tags: ["drink", "relaxing"],
-    desc: "Mollo | 355ml | 10mg THC | CBD: 2mg",
-    img: "https://oneplant-new-waio-app.b-cdn.net/media/f/f0/52/0e/0e/f0520e0e-881e-4579-a331-bb83e722e8bd.jpg"
-  },
-  {
-    name: "CBN Bedtime Blueberry Lemon Gummies",
-    type: "indica",
-    price: 6.49,
-    category: "Edibles",
-    tags: ["sleep", "edible", "blueberry", "cbn"],
-    desc: "10mg THC + 5mg CBN | Sleep aid | Blueberry Lemon flavour",
-    img: "https://oneplant-new-waio-app.b-cdn.net/media/f/fe/33/a8/51/fe33a851-2152-479b-bc01-ba80a009f406.jpg"
-  },
-  {
-    name: "Peach Ringz Sativa 1:0 510 Cartridge",
-    type: "sativa",
-    price: 34.99,
-    category: "Vapes",
-    tags: ["vape", "cartridge", "fruity"],
-    desc: "BoxHot | 1.2g | THC: 88–94% | CBD: 4.2%",
-    img: "https://oneplant-new-waio-app.b-cdn.net/media/f/46/ad/a6/be/46ada6be-ab1d-4e72-bd9e-c67b7b38450c.jpg"
+    price: 13.44,
+    category: "Capsules",
+    tags: ["capsules", "low-thc", "mct", "hybrid"],
+    desc: "4–6mg THC per cap | 1mg CBD | 15-pack | Blended hybrid, ethanol-extracted oil, mild effects.",
+    img: "https://oneplant-new-waio-app.b-cdn.net/media/f/45/95/c9/50/4595c950-1031-4a54-a387-d70bf573f570.png"
   }
 ];
