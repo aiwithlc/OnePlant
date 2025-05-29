@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#1b5e20" />
+  <meta name="description" content="Ask BudBot for cannabis product recommendations, terpene education, and product details from One Plant." />
   <link rel="icon" href="https://waio-live-imagekit.b-cdn.net/media/tv-menus/OP_Logo_-_One_Plant_Logo_-_Black.png" type="image/png" />
 
   <title>One Plant BudBot</title>
@@ -94,13 +95,26 @@
       cursor: pointer;
       font-weight: bold;
     }
-    .quick-replies {
-      display: flex;
-      flex-wrap: wrap;
-      padding: 0.75rem;
-      gap: 0.5rem;
-      background: #f1f8f2;
-    }
+   .quick-replies {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0.75rem;
+  gap: 0.5rem;
+  background: #f1f8f2;
+  max-height: 120px;
+  overflow-y: auto;
+}
+    .quick-replies button:last-child {
+  background: transparent;
+  color: #1b5e20;
+  font-weight: 600;
+  border: 1px solid #1b5e20;
+  margin-top: 0.25rem;
+}
+.quick-replies button:last-child:hover {
+  background: #e0f2e9;
+}
+
     .quick-replies button {
       background: #1b5e20;
       border: none;
@@ -183,6 +197,13 @@
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
+}
+    @media (max-width: 480px) {
+  #chat-widget {
+    width: 95vw;
+    right: 2.5vw;
+    bottom: 1.5rem;
+  }
 }
 
   </style>
