@@ -1,3 +1,5 @@
+// chatbot.js
+
 const messages = document.getElementById('messages');
 const input = document.getElementById('userInput');
 
@@ -5,7 +7,7 @@ const replies = [
   'cheap indica', 'relaxing hybrid', 'under $12', 'high THC', 'CBD rich',
   'citrus flavour', 'edibles', 'vapes', 'pre-rolls', 'beverages',
   'capsules', 'oils', 'sleep', 'energizing', 'sweet',
-  'what is limonene?', 'what is myrcene?'
+  'what is limonene?', 'what is myrcene?', 'what is caryophyllene?'
 ];
 
 replies.forEach(text => {
@@ -37,7 +39,7 @@ function showProductCard(product) {
       <p><strong>Type:</strong> ${product.type}</p>
       <p><strong>Price:</strong> $${product.price.toFixed(2)} / ${product.grams ? product.grams + 'g' : 'unit'}</p>
       <p>${product.desc}</p>
-      ${product.url ? `<p><a href="${product.url}" target="_blank">View product ↗</a></p>` : ""}
+      ${product.url ? `<a href="${product.url}" target="_blank">View product ↗</a>` : ""}
     </div>
   `;
   messages.appendChild(card);
@@ -59,37 +61,54 @@ function handleSend() {
 
 function respondTo(query) {
   const normalized = query.toLowerCase();
-  const education = {
-    limonene: "🍋 Limonene is a citrus-scented terpene known to elevate mood and reduce stress.",
-    myrcene: "🌿 Myrcene is a musky, earthy terpene that can promote relaxation and sleep.",
-    caryophyllene: "🌶️ Caryophyllene is a spicy terpene found in pepper, often associated with anti-inflammatory effects."
+
+  // Terpene educational layer
+  const terpeneInfo = {
+    limonene: {
+      text: "🍋 Limonene is known for citrusy aromas, boosts mood and helps with stress.",
+      tags: ["citrus", "limonene"]
+    },
+    myrcene: {
+      text: "🌿 Myrcene has an earthy scent and helps you relax or fall asleep.",
+      tags: ["myrcene", "relax"]
+    },
+    caryophyllene: {
+      text: "🌶️ Caryophyllene is spicy, found in pepper, may help with inflammation.",
+      tags: ["caryophyllene", "spice"]
+    }
   };
-  const key = Object.keys(education).find(k => normalized.includes(k));
-  if (key) return addMessage(`<strong>Bot:</strong> ${education[key]}`);
+
+  const terpeneMatch = Object.keys(terpeneInfo).find(t => normalized.includes(t));
+  if (terpeneMatch) {
+    addMessage(`<strong>Bot:</strong> ${terpeneInfo[terpeneMatch].text}<br>Want to see products with this terpene? (yes/no)`);
+    window.pendingTerpene = terpeneInfo[terpeneMatch].tags;
+    return;
+  }
+
+  if (window.pendingTerpene && (normalized.includes("yes") || normalized.includes("sure"))) {
+    const terpTags = window.pendingTerpene;
+    window.pendingTerpene = null;
+    const filtered = products.filter(p => terpTags.some(tag => p.tags?.includes(tag)));
+    if (filtered.length) filtered.forEach(showProductCard);
+    else addMessage(`<strong>Bot:</strong> No terpene-tagged products found yet.`);
+    return;
+  }
 
   const highTHC = /high thc|thc over (\d+)/.exec(normalized);
   const highCBD = /cbd rich|cbd over (\d+)/.exec(normalized);
   const minTHC = highTHC ? parseFloat(highTHC[1] || 20) : 0;
   const minCBD = highCBD ? parseFloat(highCBD[1] || 10) : 0;
 
-  const isCheapQuery = normalized.includes('cheap') || normalized.includes('under $12') || normalized.includes('under 12');
-
   const results = products.filter(p => {
     const pricePerGram = p.grams ? p.price / p.grams : null;
-
-    const matchesType = ['indica', 'sativa', 'hybrid', 'blend'].some(t =>
-      normalized.includes(t) && normalized.includes(p.type)
-    ) || !['indica', 'sativa', 'hybrid', 'blend'].some(t => normalized.includes(t));
-
-    const matchesCategory = p.category && normalized.includes(p.category.toLowerCase());
+    const matchesCheap = (normalized.includes('cheap') || normalized.includes('under $12') || normalized.includes('under 12')) && pricePerGram !== null && pricePerGram < 12;
     const matchesTag = p.tags && p.tags.some(tag => normalized.includes(tag));
-
+    const matchesType = ['indica', 'sativa', 'hybrid', 'blend'].some(t => normalized.includes(t)) ? normalized.includes(p.type) : true;
+    const matchesCategory = p.category && normalized.includes(p.category.toLowerCase());
     const matchesTHC = p.thc ? parseFloat(p.thc) >= minTHC : true;
     const matchesCBD = p.cbd ? parseFloat(p.cbd) >= minCBD : true;
 
-    const matchesCheap = isCheapQuery ? pricePerGram !== null && pricePerGram < 12 : true;
-
-    return matchesType && matchesTHC && matchesCBD && matchesCheap && (matchesCategory || matchesTag || isCheapQuery);
+    return matchesType && matchesTHC && matchesCBD && (matchesCheap || matchesTag || matchesCategory);
   });
 
   if (results.length > 0) {
@@ -100,6 +119,11 @@ function respondTo(query) {
     });
     results.forEach(showProductCard);
   } else {
-    addMessage("<strong>Bot:</strong> Nothing matched that. Try 'cheap indica', 'high THC', 'edibles', etc.");
+    addMessage("<strong>Bot:</strong> Nothing matched that. Want to try something new?");
+    const fallback = products.filter(p => p.tags?.includes("popular") || p.price > 30).slice(0, 3);
+    if (fallback.length) {
+      fallback.forEach(showProductCard);
+      addMessage("<strong>Bot:</strong> These are some favourites 💚");
+    }
   }
 }
