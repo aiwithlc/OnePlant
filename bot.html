@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>One Plant Enhanced Chatbot</title>
+  <title>One Plant BudBot</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: #f8f8f8;
+      background: #f4f6f8;
       margin: 0;
       padding: 0;
     }
@@ -16,86 +16,112 @@
       bottom: 2rem;
       right: 2rem;
       background-color: #ffffff;
-      border: 2px solid #000;
-      border-radius: 1rem;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-      width: 370px;
-      max-height: 550px;
+      border: 2px solid #1b5e20;
+      border-radius: 1.25rem;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+      width: 400px;
+      max-height: 600px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       z-index: 9999;
+      animation: fadeInUp 0.4s ease-in-out;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .chat-header {
-      background: #000;
+      background: #1b5e20;
       color: white;
-      padding: 1rem;
-      font-size: 1.1rem;
-      font-weight: bold;
+      padding: 1rem 1.25rem;
+      font-size: 1.2rem;
+      font-weight: 600;
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+    .chat-header::before {
+      content: "🤖";
+      margin-right: 0.5rem;
     }
     .chat-close {
       background: transparent;
       border: none;
       color: white;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .chat-close:hover {
+      transform: scale(1.2);
     }
     .chat-messages {
       flex: 1;
       padding: 1rem;
       overflow-y: auto;
       font-size: 0.95rem;
+      background-color: #fdfdfd;
     }
     .chat-input {
       display: flex;
       border-top: 1px solid #ddd;
+      background: #fff;
     }
     .chat-input input {
       flex: 1;
       border: none;
-      padding: 0.75rem;
+      padding: 0.85rem 1rem;
       font-size: 1rem;
+      border-radius: 0;
     }
     .chat-input button {
       background: #1b5e20;
       color: white;
       border: none;
-      padding: 0.75rem 1rem;
+      padding: 0 1.25rem;
       cursor: pointer;
+      font-weight: bold;
     }
     .quick-replies {
       display: flex;
       flex-wrap: wrap;
-      padding: 0.5rem;
+      padding: 0.75rem;
       gap: 0.5rem;
+      background: #f1f8f2;
     }
     .quick-replies button {
       background: #1b5e20;
       border: none;
-      border-radius: 999px;
-      padding: 0.4rem 0.75rem;
+      border-radius: 1.25rem;
+      padding: 0.5rem 1rem;
       font-size: 0.8rem;
       cursor: pointer;
       color: white;
+      transition: background 0.3s;
+    }
+    .quick-replies button:hover {
+      background: #27632a;
     }
     .product-card {
-      border: 1px solid #ccc;
-      border-radius: 8px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
       padding: 0.75rem;
       margin-top: 0.5rem;
       background: #fff;
       display: flex;
       gap: 0.75rem;
       align-items: center;
+      transition: transform 0.2s;
+    }
+    .product-card:hover {
+      transform: translateY(-2px);
     }
     .product-card img {
-      width: 60px;
-      height: 60px;
+      width: 64px;
+      height: 64px;
       object-fit: cover;
-      border-radius: 6px;
+      border-radius: 8px;
       border: 1px solid #eee;
     }
     .product-info {
@@ -104,7 +130,7 @@
     .product-info h4 {
       margin: 0 0 0.25rem;
       font-size: 1rem;
-      color: #000;
+      color: #111;
     }
     .product-info p {
       margin: 0;
@@ -112,9 +138,14 @@
       color: #444;
     }
     .product-info a {
+      display: inline-block;
+      margin-top: 0.25rem;
       text-decoration: none;
       color: #1b5e20;
       font-weight: 500;
+    }
+    .product-info a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -122,15 +153,15 @@
 
 <div id="chat-widget">
   <div class="chat-header">
-    🌿 One Plant BudBot
+    One Plant BudBot
     <button class="chat-close" onclick="document.getElementById('chat-widget').style.display='none'">✕</button>
   </div>
   <div class="chat-messages" id="messages">
-    <div><strong>Bot:</strong> Ask me for cannabis by vibe (“chill”), type (“sativa”), effect (“energizing”), flavour (“citrus”), THC/CBD %, or category ⬇️</div>
+    <div><strong>Bot:</strong> Ask me anything about cannabis 🌿—by type ("indica"), vibe ("chill"), flavour ("citrus"), % THC/CBD, or product category. Tap a suggestion below 👇</div>
   </div>
   <div class="quick-replies" id="quick-replies"></div>
   <div class="chat-input">
-    <input type="text" id="userInput" placeholder="Type a question...">
+    <input type="text" id="userInput" placeholder="Ask BudBot anything...">
     <button onclick="handleSend()">Send</button>
   </div>
 </div>
