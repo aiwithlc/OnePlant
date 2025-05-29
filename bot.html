@@ -3,8 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1b5e20" />
+  <link rel="icon" href="https://waio-live-imagekit.b-cdn.net/media/tv-menus/OP_Logo_-_One_Plant_Logo_-_Black.png" type="image/png" />
+
   <title>One Plant BudBot</title>
   <style>
+:root {
+  --green: #1b5e20;
+  --green-dark: #27632a;
+  --gray-bg: #f4f6f8;
+  --white: #fff;
+  --bot-bubble: #e8f5e9;
+  --user-bubble: #dcedc8;
+}
     body {
       font-family: 'Poppins', sans-serif;
       background: #f4f6f8;
@@ -147,6 +158,33 @@
     .product-info a:hover {
       text-decoration: underline;
     }
+
+.chat-messages div.bot-message {
+  background: var(--bot-bubble);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  margin: 0.4rem 0;
+  width: fit-content;
+  max-width: 80%;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.chat-messages div.user-message {
+  background: var(--user-bubble);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  margin: 0.4rem 0 0.4rem auto;
+  width: fit-content;
+  max-width: 80%;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
   </style>
 </head>
 <body>
