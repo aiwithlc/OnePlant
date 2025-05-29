@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>One Plant Enhanced Chatbot</title>
+  <title>One Plant Chatbot</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -121,31 +121,17 @@
     <button class="chat-close" onclick="document.getElementById('chat-widget').style.display='none'">✕</button>
   </div>
   <div class="chat-messages" id="messages">
-    <div><strong>Bot:</strong> Ask me for weed by vibe (“chill”), type (“sativa”), effect (“energizing”), flavour (“citrus”), THC/CBD %, or category ⬇️</div>
+    <div><strong>Bot:</strong> Ask me for cannabis by vibe (“chill”), type (“sativa”), effect (“energizing”), flavour (“citrus”), THC/CBD %, or category ⬇️</div>
   </div>
-  <div class="quick-replies">
-    <button onclick="handleQuick('cheap indica')">Cheap Indica</button>
-    <button onclick="handleQuick('relaxing hybrid')">Relaxing Hybrid</button>
-    <button onclick="handleQuick('under $12')">Under $12/g</button>
-    <button onclick="handleQuick('high THC')">High THC</button>
-    <button onclick="handleQuick('CBD rich')">CBD Rich</button>
-    <button onclick="handleQuick('citrus flavour')">Citrus Flavour</button>
-    <button onclick="handleQuick('edibles')">Edibles</button>
-    <button onclick="handleQuick('vapes')">Vapes</button>
-    <button onclick="handleQuick('pre-rolls')">Pre-Rolls</button>
-    <button onclick="handleQuick('beverages')">Beverages</button>
-    <button onclick="handleQuick('capsules')">Capsules</button>
-    <button onclick="handleQuick('oils')">Oils</button>
-    <button onclick="handleQuick('sleep')">Sleep</button>
-    <button onclick="handleQuick('energizing')">Energizing</button>
-    <button onclick="handleQuick('sweet')">Sweet</button>
-  </div>
+  <div class="quick-replies" id="quick-replies"></div>
   <div class="chat-input">
     <input type="text" id="userInput" placeholder="Type a question...">
     <button onclick="handleSend()">Send</button>
   </div>
 </div>
 
+<script src="products.js"></script>
+<script src="chatbot.js"></script>
 
 </body>
 </html>
