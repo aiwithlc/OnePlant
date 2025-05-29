@@ -235,10 +235,9 @@
 <button class="chatbot-toggle" onclick="toggleChatWidget()">🌿</button>
 <div id="chat-widget">
   <div class="chat-header">
-    <img class="chat-avatar" src="https://waio-live-imagekit.b-cdn.net/media/tv-menus/OP_Logo_-_One_Plant_Logo_-_Black.png" alt="Bot Avatar">
+      <img src="https://waio-live-imagekit.b-cdn.net/media/tv-menus/OP_Logo_-_One_Plant_Logo_-_Black.png" alt="Bot Avatar">
     One Plant BudBot
-    <button class="chat-close" onclick="document.getElementById('chat-widget').style.display='none'">✕</button>
-  </div>
+  <button class="chat-close" onclick="toggleChatWidget()">✕</button>  </div>
   <div class="chat-messages" id="messages">
     <div><strong>Bot:</strong> Ask me anything about cannabis 🌿—by type ("indica"), vibe ("chill"), flavour ("citrus"), % THC/CBD, or product category. Tap a suggestion below 👇</div>
   </div>
