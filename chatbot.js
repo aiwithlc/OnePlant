@@ -1,5 +1,3 @@
-// chatbot.js
-
 const messages = document.getElementById('messages');
 const input = document.getElementById('userInput');
 
@@ -10,12 +8,11 @@ const replies = [
   'what is limonene?', 'what is myrcene?'
 ];
 
-const quickReplyContainer = document.getElementById('quick-replies');
 replies.forEach(text => {
   const btn = document.createElement('button');
   btn.textContent = text.charAt(0).toUpperCase() + text.slice(1);
   btn.onclick = () => handleQuick(text);
-  quickReplyContainer.appendChild(btn);
+  document.getElementById('quick-replies').appendChild(btn);
 });
 
 input.addEventListener('keydown', function(e) {
@@ -27,6 +24,23 @@ function addMessage(text) {
   const div = document.createElement('div');
   div.innerHTML = text;
   messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function showProductCard(product) {
+  const card = document.createElement('div');
+  card.className = 'product-card';
+  card.innerHTML = `
+    <img src="${product.img}" alt="${product.name}" />
+    <div class="product-info">
+      <h4>🌿 ${product.name}</h4>
+      <p><strong>Type:</strong> ${product.type}</p>
+      <p><strong>Price:</strong> $${product.price.toFixed(2)} / ${product.grams ? product.grams + 'g' : 'unit'}</p>
+      <p>${product.desc}</p>
+      ${product.url ? `<p><a href="${product.url}" target="_blank">View product ↗</a></p>` : ""}
+    </div>
+  `;
+  messages.appendChild(card);
   messages.scrollTop = messages.scrollHeight;
 }
 
@@ -43,45 +57,27 @@ function handleSend() {
   input.value = '';
 }
 
-function showProductCard(product) {
-  const card = document.createElement('div');
-  card.className = 'product-card';
-  card.innerHTML = `
-    <img src="${product.img}" alt="${product.name}" />
-    <div class="product-info">
-      <h4>🌿 ${product.name}</h4>
-      <p><strong>Type:</strong> ${product.type}</p>
-      <p><strong>Price:</strong> $${product.price.toFixed(2)} / ${product.grams ? product.grams + 'g' : 'unit'}</p>
-      <p>${product.desc}</p>
-    </div>
-  `;
-  messages.appendChild(card);
-  messages.scrollTop = messages.scrollHeight;
-}
-
 function respondTo(query) {
-  const normalizedQuery = query.toLowerCase();
-
-  // 🌱 Education
+  const normalized = query.toLowerCase();
   const education = {
     limonene: "🍋 Limonene is a citrus-scented terpene known to elevate mood and reduce stress.",
     myrcene: "🌿 Myrcene is a musky, earthy terpene that can promote relaxation and sleep.",
     caryophyllene: "🌶️ Caryophyllene is a spicy terpene found in pepper, often associated with anti-inflammatory effects."
   };
-  const keyword = Object.keys(education).find(k => normalizedQuery.includes(k));
-  if (keyword) return addMessage(`<strong>Bot:</strong> ${education[keyword]}`);
+  const key = Object.keys(education).find(k => normalized.includes(k));
+  if (key) return addMessage(`<strong>Bot:</strong> ${education[key]}`);
 
-  const highTHC = /high thc|thc over (\d+)/.exec(normalizedQuery);
-  const highCBD = /cbd rich|cbd over (\d+)/.exec(normalizedQuery);
+  const highTHC = /high thc|thc over (\d+)/.exec(normalized);
+  const highCBD = /cbd rich|cbd over (\d+)/.exec(normalized);
   const minTHC = highTHC ? parseFloat(highTHC[1] || 20) : 0;
   const minCBD = highCBD ? parseFloat(highCBD[1] || 10) : 0;
 
   const results = products.filter(p => {
     const pricePerGram = p.grams ? p.price / p.grams : null;
-    const matchesCheap = normalizedQuery.includes('cheap') || normalizedQuery.includes('under $12') || normalizedQuery.includes('under 12');
-    const matchesTag = p.tags && p.tags.some(tag => normalizedQuery.includes(tag));
-    const matchesType = ['indica', 'sativa', 'hybrid', 'blend'].some(t => normalizedQuery.includes(t)) ? normalizedQuery.includes(p.type) : true;
-    const matchesCategory = p.category && normalizedQuery.includes(p.category.toLowerCase());
+    const matchesCheap = normalized.includes('cheap') || normalized.includes('under $12') || normalized.includes('under 12');
+    const matchesTag = p.tags && p.tags.some(tag => normalized.includes(tag));
+    const matchesType = ['indica', 'sativa', 'hybrid', 'blend'].some(t => normalized.includes(t)) ? normalized.includes(p.type) : true;
+    const matchesCategory = p.category && normalized.includes(p.category.toLowerCase());
     const matchesTHC = p.thc ? parseFloat(p.thc) >= minTHC : true;
     const matchesCBD = p.cbd ? parseFloat(p.cbd) >= minCBD : true;
 
