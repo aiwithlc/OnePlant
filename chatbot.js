@@ -72,16 +72,24 @@ function respondTo(query) {
   const minTHC = highTHC ? parseFloat(highTHC[1] || 20) : 0;
   const minCBD = highCBD ? parseFloat(highCBD[1] || 10) : 0;
 
+  const isCheapQuery = normalized.includes('cheap') || normalized.includes('under $12') || normalized.includes('under 12');
+
   const results = products.filter(p => {
     const pricePerGram = p.grams ? p.price / p.grams : null;
-    const matchesCheap = normalized.includes('cheap') || normalized.includes('under $12') || normalized.includes('under 12');
-    const matchesTag = p.tags && p.tags.some(tag => normalized.includes(tag));
-    const matchesType = ['indica', 'sativa', 'hybrid', 'blend'].some(t => normalized.includes(t)) ? normalized.includes(p.type) : true;
+
+    const matchesType = ['indica', 'sativa', 'hybrid', 'blend'].some(t =>
+      normalized.includes(t) && normalized.includes(p.type)
+    ) || !['indica', 'sativa', 'hybrid', 'blend'].some(t => normalized.includes(t));
+
     const matchesCategory = p.category && normalized.includes(p.category.toLowerCase());
+    const matchesTag = p.tags && p.tags.some(tag => normalized.includes(tag));
+
     const matchesTHC = p.thc ? parseFloat(p.thc) >= minTHC : true;
     const matchesCBD = p.cbd ? parseFloat(p.cbd) >= minCBD : true;
 
-    return matchesType && matchesTHC && matchesCBD && (matchesCheap && pricePerGram < 12 || matchesTag || matchesCategory);
+    const matchesCheap = isCheapQuery ? pricePerGram !== null && pricePerGram < 12 : true;
+
+    return matchesType && matchesTHC && matchesCBD && matchesCheap && (matchesCategory || matchesTag || isCheapQuery);
   });
 
   if (results.length > 0) {
@@ -92,6 +100,6 @@ function respondTo(query) {
     });
     results.forEach(showProductCard);
   } else {
-    addMessage("<strong>Bot:</strong> Nothing matched that. Try 'indica', 'cheap', 'edibles', or 'high THC'.");
+    addMessage("<strong>Bot:</strong> Nothing matched that. Try 'cheap indica', 'high THC', 'edibles', etc.");
   }
 }
