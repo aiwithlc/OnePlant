@@ -2,6 +2,7 @@
 
 const messages = document.getElementById('messages');
 const input = document.getElementById('userInput');
+const quickRepliesContainer = document.getElementById('quick-replies');
 
 const replies = [
   'cheap indica', 'relaxing hybrid', 'under $12', 'high THC', 'CBD rich',
@@ -10,20 +11,38 @@ const replies = [
   'what is limonene?', 'what is myrcene?', 'what is caryophyllene?'
 ];
 
-replies.forEach(text => {
-  const btn = document.createElement('button');
-  btn.textContent = text.charAt(0).toUpperCase() + text.slice(1);
-  btn.onclick = () => handleQuick(text);
-  document.getElementById('quick-replies').appendChild(btn);
-});
+let isExpanded = false;
+
+function renderQuickReplies() {
+  quickRepliesContainer.innerHTML = '';
+  const visibleReplies = isExpanded ? replies : replies.slice(0, 6);
+
+  visibleReplies.forEach(text => {
+    const btn = document.createElement('button');
+    btn.textContent = text.charAt(0).toUpperCase() + text.slice(1);
+    btn.onclick = () => handleQuick(text);
+    quickRepliesContainer.appendChild(btn);
+  });
+
+  const toggleBtn = document.createElement('button');
+  toggleBtn.textContent = isExpanded ? 'Show Less' : 'More Options';
+  toggleBtn.onclick = () => {
+    isExpanded = !isExpanded;
+    renderQuickReplies();
+  };
+  quickRepliesContainer.appendChild(toggleBtn);
+}
+
+renderQuickReplies();
 
 input.addEventListener('keydown', function(e) {
   if (e.key === 'Enter') handleSend();
   if (e.key === 'Escape') document.getElementById('chat-widget').style.display = 'none';
 });
 
-function addMessage(text) {
+function addMessage(text, sender = 'bot') {
   const div = document.createElement('div');
+  div.className = sender === 'bot' ? 'bot-message' : 'user-message';
   div.innerHTML = text;
   messages.appendChild(div);
   messages.scrollTop = messages.scrollHeight;
@@ -54,7 +73,7 @@ function handleQuick(text) {
 function handleSend() {
   const query = input.value.trim();
   if (!query) return;
-  addMessage(`<strong>You:</strong> ${query}`);
+  addMessage(`<strong>You:</strong> ${query}`, 'user');
   respondTo(query);
   input.value = '';
 }
@@ -94,32 +113,29 @@ function respondTo(query) {
     return;
   }
 
-  const highTHC = /high thc|thc over (\d+)/.exec(normalized);
+  const highTHC = /high thc|thc over (\d+)|strong thc|potent thc/.exec(normalized);
   const highCBD = /cbd rich|cbd over (\d+)/.exec(normalized);
   const minTHC = highTHC ? parseFloat(highTHC[1] || 20) : 0;
   const minCBD = highCBD ? parseFloat(highCBD[1] || 10) : 0;
 
-  const results = products.filter(p => {
+  const results = products.map(p => {
     const pricePerGram = p.grams ? p.price / p.grams : null;
-    const matchesCheap = (normalized.includes('cheap') || normalized.includes('under $12') || normalized.includes('under 12')) && pricePerGram !== null && pricePerGram < 12;
-    const matchesTag = p.tags && p.tags.some(tag => normalized.includes(tag));
-    const matchesType = ['indica', 'sativa', 'hybrid', 'blend'].some(t => normalized.includes(t)) ? normalized.includes(p.type) : true;
-    const matchesCategory = p.category && normalized.includes(p.category.toLowerCase());
-    const matchesTHC = p.thc ? parseFloat(p.thc) >= minTHC : true;
-    const matchesCBD = p.cbd ? parseFloat(p.cbd) >= minCBD : true;
-
-    return matchesType && matchesTHC && matchesCBD && (matchesCheap || matchesTag || matchesCategory);
-  });
+    const score = [
+      (normalized.includes('cheap') || normalized.includes('under $12') || normalized.includes('under 12')) && pricePerGram !== null && pricePerGram < 12 ? 2 : 0,
+      p.tags?.some(tag => normalized.includes(tag)) ? 2 : 0,
+      ['indica', 'sativa', 'hybrid', 'blend'].some(t => normalized.includes(t) && p.type.includes(t)) ? 2 : 0,
+      p.category && normalized.includes(p.category.toLowerCase()) ? 2 : 0,
+      p.thc && parseFloat(p.thc) >= minTHC ? 1 : 0,
+      p.cbd && parseFloat(p.cbd) >= minCBD ? 1 : 0
+    ].reduce((a, b) => a + b, 0);
+    return { ...p, score };
+  }).filter(p => p.score > 0);
 
   if (results.length > 0) {
-    results.sort((a, b) => {
-      const aRate = a.grams ? a.price / a.grams : a.price;
-      const bRate = b.grams ? b.price / b.grams : b.price;
-      return aRate - bRate;
-    });
+    results.sort((a, b) => b.score - a.score);
     results.forEach(showProductCard);
   } else {
-    addMessage("<strong>Bot:</strong> Nothing matched that. Want to try something new?");
+    addMessage("<strong>Bot:</strong> Nothing matched that. Want to try something new like <em>‘show me popular picks under $25’</em>?");
     const fallback = products.filter(p => p.tags?.includes("popular") || p.price > 30).slice(0, 3);
     if (fallback.length) {
       fallback.forEach(showProductCard);
