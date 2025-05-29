@@ -248,7 +248,14 @@
     <button onclick="handleSend()">Send</button>
   </div>
 </div>
-
+<script>
+  function toggleChatWidget() {
+    const widget = document.getElementById("chat-widget");
+    widget.style.display = widget.style.display === "flex" ? "none" : "flex";
+    widget.style.flexDirection = "column";
+    setTimeout(() => document.getElementById("userInput").focus(), 150);
+  }
+</script>
 <script src="products.js"></script>
 <script src="chatbot.js"></script>
 
