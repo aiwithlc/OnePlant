@@ -6,34 +6,52 @@
   <meta name="theme-color" content="#1b5e20" />
   <meta name="description" content="Ask BudBot for cannabis product recommendations, terpene education, and product details from One Plant." />
   <link rel="icon" href="https://waio-live-imagekit.b-cdn.net/media/tv-menus/OP_Logo_-_One_Plant_Logo_-_Black.png" type="image/png" />
-
   <title>One Plant BudBot</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
   <style>
-:root {
-  --green: #1b5e20;
-  --green-dark: #27632a;
-  --gray-bg: #f4f6f8;
-  --white: #fff;
-  --bot-bubble: #e8f5e9;
-  --user-bubble: #dcedc8;
-}
+    :root {
+      --green: #1b5e20;
+      --green-dark: #27632a;
+      --gray-bg: #f4f6f8;
+      --white: #fff;
+      --bot-bubble: #e8f5e9;
+      --user-bubble: #dcedc8;
+    }
     body {
       font-family: 'Poppins', sans-serif;
       background: #f4f6f8;
       margin: 0;
       padding: 0;
     }
+    .chatbot-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #1b5e20, #6ABFC4);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 1.8rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
     #chat-widget {
       position: fixed;
-      bottom: 2rem;
-      right: 2rem;
+      bottom: 90px;
+      right: 20px;
       background-color: #ffffff;
       border: 2px solid #1b5e20;
       border-radius: 1.25rem;
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
       width: 400px;
       max-height: 600px;
-      display: flex;
+      display: none;
       flex-direction: column;
       overflow: hidden;
       z-index: 9999;
@@ -54,7 +72,7 @@
       align-items: center;
     }
     .chat-header::before {
-      content: "🤖";
+      content: "🌿";
       margin-right: 0.5rem;
     }
     .chat-close {
@@ -85,7 +103,6 @@
       border: none;
       padding: 0.85rem 1rem;
       font-size: 1rem;
-      border-radius: 0;
     }
     .chat-input button {
       background: #1b5e20;
@@ -95,128 +112,56 @@
       cursor: pointer;
       font-weight: bold;
     }
-   .quick-replies {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 0.75rem;
-  gap: 0.5rem;
-  background: #f1f8f2;
-  max-height: 120px;
-  overflow-y: auto;
-}
-    .quick-replies button:last-child {
-  background: transparent;
-  color: #1b5e20;
-  font-weight: 600;
-  border: 1px solid #1b5e20;
-  margin-top: 0.25rem;
-}
-.quick-replies button:last-child:hover {
-  background: #e0f2e9;
-}
-
-    .quick-replies button {
-      background: #1b5e20;
-      border: none;
-      border-radius: 1.25rem;
-      padding: 0.5rem 1rem;
-      font-size: 0.8rem;
-      cursor: pointer;
-      color: white;
-      transition: background 0.3s;
+    .chat-messages div.bot-message {
+      background: var(--bot-bubble);
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.75rem;
+      margin: 0.4rem 0;
+      width: fit-content;
+      max-width: 80%;
+      animation: fadeIn 0.3s ease-in;
     }
-    .quick-replies button:hover {
-      background: #27632a;
-    }
-    .product-card {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 0.75rem;
-      margin-top: 0.5rem;
-      background: #fff;
-      display: flex;
-      gap: 0.75rem;
-      align-items: center;
-      transition: transform 0.2s;
-    }
-    .product-card:hover {
-      transform: translateY(-2px);
-    }
-    .product-card img {
-      width: 64px;
-      height: 64px;
-      object-fit: cover;
-      border-radius: 8px;
-      border: 1px solid #eee;
-    }
-    .product-info {
-      flex: 1;
-    }
-    .product-info h4 {
-      margin: 0 0 0.25rem;
-      font-size: 1rem;
-      color: #111;
-    }
-    .product-info p {
-      margin: 0;
-      font-size: 0.85rem;
-      color: #444;
-    }
-    .product-info a {
-      display: inline-block;
-      margin-top: 0.25rem;
-      text-decoration: none;
-      color: #1b5e20;
+    .chat-messages div.user-message {
+      background: var(--user-bubble);
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.75rem;
+      margin: 0.4rem 0 0.4rem auto;
+      width: fit-content;
+      max-width: 80%;
       font-weight: 500;
+      animation: fadeIn 0.3s ease-in;
     }
-    .product-info a:hover {
-      text-decoration: underline;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-
-.chat-messages div.bot-message {
-  background: var(--bot-bubble);
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.75rem;
-  margin: 0.4rem 0;
-  width: fit-content;
-  max-width: 80%;
-  animation: fadeIn 0.3s ease-in;
-}
-
-.chat-messages div.user-message {
-  background: var(--user-bubble);
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.75rem;
-  margin: 0.4rem 0 0.4rem auto;
-  width: fit-content;
-  max-width: 80%;
-  font-weight: 500;
-  animation: fadeIn 0.3s ease-in;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+    .chat-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
     @media (max-width: 480px) {
-  #chat-widget {
-    width: 95vw;
-    right: 2.5vw;
-    bottom: 1.5rem;
-  }
-}
-
+      #chat-widget {
+        width: 95vw;
+        right: 2.5vw;
+        bottom: 1.5rem;
+      }
+    }
   </style>
 </head>
 <body>
 
+<button class="chatbot-toggle" onclick="toggleChatWidget()">🌿</button>
+
 <div id="chat-widget">
   <div class="chat-header">
+    <img class="chat-avatar" src="https://waio-live-imagekit.b-cdn.net/media/tv-menus/OP_Logo_-_One_Plant_Logo_-_Black.png" alt="Bot Avatar">
     One Plant BudBot
-    <button class="chat-close" onclick="document.getElementById('chat-widget').style.display='none'">✕</button>
+    <button class="chat-close" onclick="toggleChatWidget()">✕</button>
   </div>
   <div class="chat-messages" id="messages">
-    <div><strong>Bot:</strong> Ask me anything about cannabis 🌿—by type ("indica"), vibe ("chill"), flavour ("citrus"), % THC/CBD, or product category. Tap a suggestion below 👇</div>
+    <div class="bot-message">🌿 Ask me anything about cannabis — by type ("indica"), vibe ("chill"), flavour ("citrus"), % THC/CBD, or product category. Tap a suggestion below 👇</div>
   </div>
   <div class="quick-replies" id="quick-replies"></div>
   <div class="chat-input">
@@ -225,8 +170,15 @@
   </div>
 </div>
 
+<script>
+  function toggleChatWidget() {
+    const widget = document.getElementById("chat-widget");
+    widget.style.display = widget.style.display === "flex" ? "none" : "flex";
+    widget.style.flexDirection = "column";
+    setTimeout(() => document.getElementById("userInput").focus(), 150);
+  }
+</script>
 <script src="products.js"></script>
 <script src="chatbot.js"></script>
-
 </body>
 </html>
