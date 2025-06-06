@@ -7,7 +7,7 @@ const products = [
     category: "Dried Flower",
     tags: ["fruity", "citrus", "high-thc"],
     desc: "Tangy citrus, 25–31% THC.",
-    url: "https://shop.waio.app/product/6039/",
+    url: "https://www.oneplant.ca/locations/toronto-kensington#/product/6039/",
     img: "https://oneplant-new-waio-app.b-cdn.net/media/f/5f/7e/05/16/5f7e0516-8486-4449-b5cb-dc1996c62a47.jpg"
   },
   {
@@ -18,7 +18,7 @@ const products = [
     category: "Pre-Rolls",
     tags: ["pre-roll", "banana", "chill"],
     desc: "Smooth indica with banana flavour. 22–29.5% THC.",
-    url: "https://shop.waio.app/product/6031/",
+    url: "https://www.oneplant.ca/locations/toronto-kensington#/product/6031/",
     img: "https://oneplant-new-waio-app.b-cdn.net/media/f/7d/f5/3d/28/7df53d28-5b8b-4cef-843a-d634aa6ef074.jpg"
   },
   {
@@ -29,7 +29,7 @@ const products = [
     category: "Pre-Rolls",
     tags: ["pre-roll", "sativa", "energize"],
     desc: "2x0.5g. Uplifting and herbal. THC 17–23%.",
-    url: "https://shop.waio.app/product/6008/",
+    url: "https://www.oneplant.ca/locations/toronto-kensington#/product/6008/",
     img: "https://oneplant-new-waio-app.b-cdn.net/media/f/4c/6d/4a/fa/4c6d4afa-0a66-46b2-b196-47952e39d236.jpg"
   },
   {
@@ -39,7 +39,7 @@ const products = [
     category: "Edibles",
     tags: ["edible", "multi-flavour", "gummy"],
     desc: "4-pack soft chews, 10mg THC total. Flavours: cherry, watermelon, apple, strawberry.",
-    url: "https://shop.waio.app/product/5989/",
+    url: "https://www.oneplant.ca/locations/toronto-kensington#/product/5989/",
     img: "https://oneplant-new-waio-app.b-cdn.net/media/91280d5b8410/9a/b4/f1/84/9ab4f184-37b3-4155-bb0e-69a7a41b4ce5.jpg"
   },
   {
@@ -50,7 +50,7 @@ const products = [
     category: "Dried Flower",
     tags: ["flower", "sale", "bundle"],
     desc: "Back Forty | 28g | THC: 25–31%",
-    url: "https://shop.waio.app/product/6040/",
+    url: "https://www.oneplant.ca/locations/toronto-kensington#/product/6040/",
     img: "https://oneplant-new-waio-app.b-cdn.net/media/f/04/7d/71/b5/047d71b5-86a6-4ae7-a5cf-16e50f374f8f.jpg"
   },
   {
@@ -61,7 +61,7 @@ const products = [
     category: "Dried Flower",
     tags: ["flower", "plant perks", "relax"],
     desc: "Back Forty | 28g | THC: 24–30% | CBD: 1%",
-    url: "https://shop.waio.app/product/6042/",
+    url: "https://www.oneplant.ca/locations/toronto-kensington#/product/6042/",
     img: "https://oneplant-new-waio-app.b-cdn.net/media/f/3b/9f/d0/ec/3b9fd0ec-4045-43c3-beb9-c0856c70aa0f.jpg"
   },
   {
@@ -71,7 +71,7 @@ const products = [
     category: "Capsules",
     tags: ["capsules", "softgel", "mild-thc"],
     desc: "15 softgels | 4–6mg THC each | CBD: 1mg | Ethanol-extracted hybrid MCT formula.",
-    url: "https://shop.waio.app/product/6353/",
+    url: "https://www.oneplant.ca/locations/toronto-kensington#/product/6353/",
     img: "https://oneplant-new-waio-app.b-cdn.net/media/f/45/95/c9/50/4595c950-1031-4a54-a387-d70bf573f570.png"
   },
   {
@@ -81,7 +81,7 @@ const products = [
     category: "Capsules",
     tags: ["capsules", "high-cbd", "softgel"],
     desc: "15 caps | 1.5% THC | 2.2% CBD | 30mg CBD per cap | CO2-extracted, MCT oil base.",
-    url: "https://shop.waio.app/product/6355/",
+    url: "https://www.oneplant.ca/locations/toronto-kensington#/product/6355/",
     img: "https://oneplant-new-waio-app.b-cdn.net/media/f/69/b8/e3/8b/69b8e38b-7f3f-4f2b-8d6b-098f75b4b2b3.jpg"
   },
   {
@@ -91,7 +91,7 @@ const products = [
     category: "Oils and Sprays",
     tags: ["oil", "cbd", "low-thc"],
     desc: "30ml bottle | 57mg THC | 384–471mg CBD | CO2-extracted, MCT formula for ingestion only.",
-    url: "https://shop.waio.app/product/6359/",
+    url: "https://www.oneplant.ca/locations/toronto-kensington#/product/6359/",
     img: "https://oneplant-new-waio-app.b-cdn.net/media/f/b5/09/23/7d/b509237d-3adf-47f9-ae0f-bd701b74312a.jpg"
   }
 ];
