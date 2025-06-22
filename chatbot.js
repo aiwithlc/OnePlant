@@ -116,9 +116,15 @@ function respondTo(query) {
   if (window.pendingTerpene && (normalized.includes("yes") || normalized.includes("sure"))) {
     const terpTags = window.pendingTerpene;
     window.pendingTerpene = null;
-    const filtered = products.filter(p => terpTags.some(tag => p.tags?.includes(tag)));
+    const filtered = products.filter(p =>
+  terpTags.some(tag =>
+    (p.tags && p.tags.map(t => t.toLowerCase()).includes(tag.toLowerCase())) ||
+    (p.terpenes && p.terpenes.map(t => t.toLowerCase()).includes(tag.toLowerCase()))
+  )
+);
+
     if (filtered.length) filtered.forEach(showProductCard);
-    else addMessage(`<strong>Bot:</strong> No terpene-tagged products found yet.`);
+    else addMessage(`<strong>Bot:</strong> I couldn’t find any products tagged with that terpene yet. Want to try something else like “chill pre-roll” or “under $25”?`);
     return;
   }
 
