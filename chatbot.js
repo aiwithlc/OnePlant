@@ -94,15 +94,15 @@ function respondTo(query) {
   const terpeneInfo = {
     limonene: {
       text: "🍋 Limonene is known for citrusy aromas, boosts mood and helps with stress.",
-      tags: ["citrus", "limonene"]
+      tags: ["citrus", "Limonene"]
     },
     myrcene: {
       text: "🌿 Myrcene has an earthy scent and helps you relax or fall asleep.",
-      tags: ["myrcene", "relax"]
+      tags: ["Myrcene", "relax"]
     },
     caryophyllene: {
       text: "🌶️ Caryophyllene is spicy, found in pepper, may help with inflammation.",
-      tags: ["caryophyllene", "spice"]
+      tags: ["Caryophyllene", "spice"]
     }
   };
 
