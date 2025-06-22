@@ -233,11 +233,11 @@ body {
   </style>
 </head>
 <body>
-<button class="chatbot-toggle" onclick="toggleChatWidget()">🌿</button>
+<button class="chatbot-toggle" onclick="toggleChatWidget() " aria-label="Open chat">🌿</button>
 <div id="chat-widget">
   <div class="chat-header">
     One Plant BudBot
-    <button class="chat-close" onclick="toggleChatWidget()">✕</button>
+    <button class="chat-close" onclick="toggleChatWidget()" aria-label="Close chat">✕</button>
   </div>
   <div class="chat-messages" id="messages">
     <div class="bot-message">Ask me anything about cannabis 🌿—by type ("indica"), vibe ("chill"), flavour ("citrus"), % THC/CBD, or product category. Tap a suggestion below 👇</div>
@@ -257,10 +257,10 @@ body {
     widget.style.flexDirection = "column";
     setTimeout(() => document.getElementById("userInput").focus(), 150);
   }
-  document.getElementById('userInput').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') handleSend();
-    if (e.key === 'Escape') document.getElementById('chat-widget').style.display = 'none';
-  });
+ document.getElementById('userInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') handleSend();
+  if (e.key === 'Escape') document.getElementById('chat-widget').style.display = 'none';
+});
 </script>
 <script src="products.js"></script>
 <script src="chatbot.js"></script>
