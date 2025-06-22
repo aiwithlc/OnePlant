@@ -5,10 +5,11 @@ const input = document.getElementById('userInput');
 const quickRepliesContainer = document.getElementById('quick-replies');
 
 const replies = [
-  'cheap indica', 'relaxing hybrid', 'under $12', 'high THC', 'CBD rich',
-  'citrus flavour', 'edibles', 'vapes', 'pre-rolls', 'beverages',
-  'capsules', 'oils', 'sleep', 'energizing', 'sweet',
-  'what is limonene?', 'what is myrcene?', 'what is caryophyllene?'
+  '🌙 Cheap Indica', '😌 Relaxing Hybrid', '💸 Under $12', '🔥 High THC',
+  '🧘 CBD Rich', '🍋 Citrus Flavour', '🍬 Edibles', '💨 Vapes',
+  '🚬 Pre-rolls', '🥤 Beverages', '💊 Capsules', '🛢 Oils',
+  '😴 Sleep', '⚡ Energizing', '🍭 Sweet',
+  '🍋 What is Limonene?', '🌿 What is Myrcene?', '🌶 What is Caryophyllene?'
 ];
 
 let isExpanded = false;
