@@ -106,6 +106,11 @@ function respondTo(query) {
     }
   };
 
+  if (normalized.includes("terpenes") || normalized.includes("terps")) {
+  addMessage(`<strong>Bot:</strong> Terpenes are the aromatic compounds that give cannabis its flavour and aroma 🌿.<br>Some common ones: 🍋 Limonene, 🌿 Myrcene, 🌶️ Caryophyllene.<br>Type any of those to learn more or see products that include them.`);
+  return;
+}
+
   const terpeneMatch = Object.keys(terpeneInfo).find(t => normalized.includes(t));
   if (terpeneMatch) {
     addMessage(`<strong>Bot:</strong> ${terpeneInfo[terpeneMatch].text}<br>Want to see products with this terpene? (yes/no)`);
