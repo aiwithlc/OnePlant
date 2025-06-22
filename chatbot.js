@@ -17,7 +17,6 @@ let isExpanded = false;
 function renderQuickReplies() {
   quickRepliesContainer.innerHTML = '';
   const visibleReplies = isExpanded ? replies : replies.slice(0, 6);
-
   visibleReplies.forEach(text => {
     const btn = document.createElement('button');
     btn.textContent = text.charAt(0).toUpperCase() + text.slice(1);
@@ -36,7 +35,7 @@ function renderQuickReplies() {
 
 renderQuickReplies();
 
-input.addEventListener('keydown', function (e) {
+input.addEventListener('keydown', function(e) {
   if (e.key === 'Enter') handleSend();
   if (e.key === 'Escape') document.getElementById('chat-widget').style.display = 'none';
 });
@@ -58,9 +57,9 @@ function showProductCard(product) {
       <h4>🌿 ${product.name}</h4>
       <p><strong>Type:</strong> ${product.type}</p>
       <p><strong>Price:</strong> $${product.price.toFixed(2)} / ${product.grams ? product.grams + 'g' : 'unit'}</p>
-      <p><strong>THC Info:</strong> ${product.desc}</p>
       <p><strong>Terpenes:</strong> ${product.terpenes?.join(', ') || "N/A"}</p>
       <p><strong>Effects:</strong> ${product.reportedEffects?.join(', ') || "N/A"}</p>
+      <p>${product.desc}</p>
       ${product.url ? `<a href="${product.url}" target="_blank">View product ↗</a>` : ""}
     </div>
   `;
@@ -84,7 +83,14 @@ function handleSend() {
 function respondTo(query) {
   const normalized = query.toLowerCase();
 
-  // 🍋 Terpene education
+  // Smart keyword match
+  const matches = matchProductToQuery(normalized);
+  if (matches.length > 0) {
+    matches.forEach(showProductCard);
+    return;
+  }
+
+  // Terpene educational layer
   const terpeneInfo = {
     limonene: {
       text: "🍋 Limonene is known for citrusy aromas, boosts mood and helps with stress.",
@@ -116,14 +122,7 @@ function respondTo(query) {
     return;
   }
 
-  // 🧠 Match custom queries to product name, tags, or keywords
-  const matches = matchProductToQuery(normalized);
-  if (matches.length > 0) {
-    matches.forEach(showProductCard);
-    return;
-  }
-
-  // Fallback: scoring logic
+  // Scoring logic
   const highTHC = /high thc|thc over (\d+)|strong thc|potent thc/.exec(normalized);
   const highCBD = /cbd rich|cbd over (\d+)/.exec(normalized);
   const minTHC = highTHC ? parseFloat(highTHC[1] || 20) : 0;
@@ -160,6 +159,6 @@ function matchProductToQuery(input) {
   return products.filter(p =>
     p.name.toLowerCase().includes(query) ||
     p.tags?.some(tag => query.includes(tag)) ||
-    (p.keywords && p.keywords.some(kw => query.includes(kw)))
+    p.keywords?.some(kw => query.includes(kw))
   );
 }
