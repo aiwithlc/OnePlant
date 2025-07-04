@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,10 +13,13 @@
 :root {
   --green: #1b5e20;
   --green-dark: #27632a;
+  --green-light: #4c8c4a;
   --gray-bg: #f4f6f8;
   --white: #fff;
   --bot-bubble: #e8f5e9;
   --user-bubble: #dcedc8;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
 }
 body {
   font-family: 'Poppins', sans-serif;
@@ -26,7 +31,7 @@ body {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background: linear-gradient(135deg, #1b5e20, #6ABFC4);
+  background: linear-gradient(135deg, #1b5e20, #388e3c);
   color: white;
   border: none;
   border-radius: 50%;
@@ -39,13 +44,18 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 10000;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.chatbot-toggle:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
 }
 #chat-widget {
   position: fixed;
   right: 2rem;
   bottom: 2rem;
   background-color: #ffffff;
-  border: 2px solid #1b5e20;
+  border: none;
   border-radius: 1.25rem;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
   width: 400px;
@@ -62,7 +72,7 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 .chat-header {
-  background: #1b5e20;
+  background: linear-gradient(135deg, #1b5e20, #388e3c);
   color: white;
   padding: 1rem 1.25rem;
   font-size: 1.2rem;
@@ -92,10 +102,11 @@ body {
   overflow-y: auto;
   font-size: 0.95rem;
   background-color: #fdfdfd;
+  scroll-behavior: smooth;
 }
 .chat-footer {
   background: #fff;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #eee;
   box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
   z-index: 2;
 }
@@ -109,6 +120,7 @@ body {
   padding: 0.85rem 1rem;
   font-size: 1rem;
   border-radius: 0;
+  outline: none;
 }
 .chat-input button {
   background: #1b5e20;
@@ -117,6 +129,10 @@ body {
   padding: 0 1.25rem;
   cursor: pointer;
   font-weight: bold;
+  transition: background 0.2s;
+}
+.chat-input button:hover {
+  background: #388e3c;
 }
 .quick-replies {
   display: flex;
@@ -135,10 +151,13 @@ body {
   font-size: 0.8rem;
   cursor: pointer;
   color: white;
-  transition: background 0.3s;
+  transition: all 0.3s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 .quick-replies button:hover {
-  background: #27632a;
+  background: #388e3c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 .quick-replies button:last-child {
   background: transparent;
@@ -151,22 +170,24 @@ body {
   background: #e0f2e9;
 }
 .product-card {
-  border: 1px solid #ddd;
-  border-radius: 10px;
+  border: 1px solid #eee;
+  border-radius: 12px;
   padding: 0.75rem;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   background: #fff;
   display: flex;
   gap: 0.75rem;
   align-items: center;
-  transition: transform 0.2s;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 .product-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
 }
 .product-card img {
-  width: 64px;
-  height: 64px;
+  width: 70px;
+  height: 70px;
   object-fit: cover;
   border-radius: 8px;
   border: 1px solid #eee;
@@ -196,22 +217,24 @@ body {
 }
 .chat-messages div.bot-message {
   background: var(--bot-bubble);
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.75rem;
-  margin: 0.4rem 0;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  margin: 0.5rem 0;
   width: fit-content;
   max-width: 80%;
   animation: fadeIn 0.3s ease-in;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 .chat-messages div.user-message {
   background: var(--user-bubble);
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.75rem;
-  margin: 0.4rem 0 0.4rem auto;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  margin: 0.5rem 0 0.5rem auto;
   width: fit-content;
   max-width: 80%;
   font-weight: 500;
   animation: fadeIn 0.3s ease-in;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(6px); }
@@ -230,6 +253,173 @@ body {
   border-radius: 50%;
   margin-right: 0.5rem;
 }
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: var(--bot-bubble);
+  border-radius: 1rem;
+  width: fit-content;
+  margin: 0.5rem 0;
+}
+.typing-indicator span {
+  height: 8px;
+  width: 8px;
+  float: left;
+  margin: 0 1px;
+  background-color: #9E9EA1;
+  display: block;
+  border-radius: 50%;
+  opacity: 0.4;
+}
+.typing-indicator span:nth-of-type(1) {
+  animation: 1s blink infinite 0.3333s;
+}
+.typing-indicator span:nth-of-type(2) {
+  animation: 1s blink infinite 0.6666s;
+}
+.typing-indicator span:nth-of-type(3) {
+  animation: 1s blink infinite 0.9999s;
+}
+@keyframes blink {
+  50% { opacity: 1; }
+}
+.product-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.product-actions button {
+  background: #f1f8f2;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  color: #1b5e20;
+  transition: all 0.2s;
+}
+.product-actions button:hover {
+  background: #e0f2e9;
+  border-color: #1b5e20;
+}
+.saved-products {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background: #f9f9f9;
+  border-radius: 0.5rem;
+  border: 1px solid #eee;
+}
+.saved-products h5 {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  color: #333;
+}
+.saved-products ul {
+  margin: 0;
+  padding: 0 0 0 1.25rem;
+  font-size: 0.85rem;
+}
+.saved-products li {
+  margin-bottom: 0.25rem;
+  cursor: pointer;
+  color: #1b5e20;
+}
+.saved-products li:hover {
+  text-decoration: underline;
+}
+.product-badge {
+  display: inline-block;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-right: 0.25rem;
+  color: white;
+}
+.badge-thc {
+  background: #ff7043;
+}
+.badge-cbd {
+  background: #5c6bc0;
+}
+.badge-hybrid {
+  background: #9575cd;
+}
+.badge-sativa {
+  background: #ffa726;
+}
+.badge-indica {
+  background: #7e57c2;
+}
+.product-comparison {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  border: 1px solid #eee;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+.comparison-header {
+  grid-column: 1 / -1;
+  background: #f1f8f2;
+  padding: 0.5rem;
+  font-weight: 600;
+  text-align: center;
+  font-size: 0.9rem;
+}
+.comparison-product {
+  padding: 0.5rem;
+  border-right: 1px solid #eee;
+}
+.comparison-product:last-child {
+  border-right: none;
+}
+.comparison-product h5 {
+  margin: 0 0 0.25rem;
+  font-size: 0.9rem;
+}
+.comparison-product p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #555;
+}
+.terpene-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.terpene-icon {
+  font-size: 1.5rem;
+}
+.terpene-details {
+  flex: 1;
+}
+.terpene-details h5 {
+  margin: 0;
+  font-size: 0.9rem;
+}
+.terpene-details p {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+  color: #555;
+}
+.effects-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+.effect-tag {
+  background: #f1f8f2;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.15rem 0.4rem;
+  font-size: 0.7rem;
+  color: #1b5e20;
+}
   </style>
 </head>
 <body style="
@@ -241,14 +431,14 @@ body {
   margin: 0;
   padding: 0;
 ">
-<button class="chatbot-toggle" onclick="toggleChatWidget() " aria-label="Open chat">🌿</button>
+<button class="chatbot-toggle" onclick="toggleChatWidget()" aria-label="Open chat">🌿</button>
 <div id="chat-widget">
   <div class="chat-header">
     One Plant BudBot
     <button class="chat-close" onclick="toggleChatWidget()" aria-label="Close chat">✕</button>
   </div>
   <div class="chat-messages" id="messages">
-    <div class="bot-message">Ask me anything about cannabis 🌿—by type ("indica"), vibe ("chill"), flavour ("citrus"), % THC/CBD, or product category. Tap a suggestion below 👇</div>
+    <div class="bot-message">Welcome to One Plant BudBot! Ask me anything about cannabis 🌿—by type ("indica"), vibe ("chill"), flavour ("citrus"), % THC/CBD, or product category. Tap a suggestion below 👇</div>
   </div>
   <div class="chat-footer">
     <div class="quick-replies" id="quick-replies"></div>
@@ -258,19 +448,965 @@ body {
     </div>
   </div>
 </div>
+
 <script>
-  function toggleChatWidget() {
-    const widget = document.getElementById("chat-widget");
-    widget.style.display = widget.style.display === "flex" ? "none" : "flex";
-    widget.style.flexDirection = "column";
-    setTimeout(() => document.getElementById("userInput").focus(), 150);
+// Products data
+const products = [
+  {
+    id: 1,
+    name: "Mandarin Cookies",
+    type: "sativa",
+    grams: 3.5,
+    price: 23.43,
+    category: "Dried Flower",
+    tags: ["fruity", "citrus", "high-thc"],
+    desc: "Tangy citrus, 25–31% THC.",
+    thcLevel: 28,
+    cbdLevel: 0.1,
+    terpenes: ["Limonene", "Caryophyllene", "Myrcene"],
+    reportedEffects: ["Uplifted", "Focused", "Creative"],
+    flavourNotes: ["Citrus", "Mandarin", "Herbal"],
+    bestFor: ["Daytime", "Creative Work"],
+    keywords: ["mandarin cookies", "sativa citrus", "high thc sativa", "energizing flower"],
+    url: "https://www.oneplant.ca/locations/toronto-kensington#/product/6039/",
+    img: "https://oneplant-new-waio-app.b-cdn.net/media/f/5f/7e/05/16/5f7e0516-8486-4449-b5cb-dc1996c62a47.jpg"
+  },
+  {
+    id: 2,
+    name: "Banana OG Pre-Roll",
+    type: "indica",
+    grams: 3.5,
+    price: 22.40,
+    category: "Pre-Rolls",
+    tags: ["pre-roll", "banana", "chill", "sweet"],
+    desc: "Smooth indica with banana flavour. 22–29.5% THC.",
+    thcLevel: 26,
+    cbdLevel: 0.5,
+    terpenes: ["Myrcene", "Limonene", "Pinene"],
+    reportedEffects: ["Relaxed", "Sleepy", "Euphoric"],
+    flavourNotes: ["Banana", "Earthy", "Sweet"],
+    bestFor: ["Evening", "Relaxation", "Stress Relief"],
+    keywords: ["banana og", "indica banana", "pre-roll relaxing", "chill indica", "sweet"],
+    url: "https://www.oneplant.ca/locations/toronto-kensington#/product/6031/",
+    img: "https://oneplant-new-waio-app.b-cdn.net/media/f/7d/f5/3d/28/7df53d28-5b8b-4cef-843a-d634aa6ef074.jpg"
+  },
+  {
+    id: 3,
+    name: "Jack Haze Pre-Roll",
+    type: "sativa",
+    grams: 1,
+    price: 9.84,
+    category: "Pre-Rolls",
+    tags: ["pre-roll", "sativa", "energize"],
+    desc: "2x0.5g. Uplifting and herbal. THC 17–23%.",
+    thcLevel: 20,
+    cbdLevel: 0.2,
+    terpenes: ["Terpinolene", "Pinene", "Caryophyllene"],
+    reportedEffects: ["Energetic", "Talkative", "Creative"],
+    flavourNotes: ["Herbal", "Citrus", "Pepper"],
+    bestFor: ["Daytime", "Focus", "Socializing"],
+    keywords: ["jack haze", "sativa pre-roll", "herbal weed", "focus joint"],
+    url: "https://www.oneplant.ca/locations/toronto-kensington#/product/6008/",
+    img: "https://oneplant-new-waio-app.b-cdn.net/media/f/4c/6d/4a/fa/4c6d4afa-0a66-46b2-b196-47952e39d236.jpg"
+  },
+  {
+    id: 4,
+    name: "No.11 Distillate Delta 9 - Multi-Flavour",
+    type: "hybrid",
+    price: 4.49,
+    category: "Edibles",
+    tags: ["edible", "multi-flavour", "gummy", "relax", "sweet"],
+    desc: "4-pack soft chews, 10mg THC total. Flavours: cherry, watermelon, apple, strawberry.",
+    thcLevel: 10,
+    cbdLevel: 0,
+    terpenes: ["Unknown (Distillate)"],
+    reportedEffects: ["Balanced", "Mild", "Happy"],
+    flavourNotes: ["Cherry", "Watermelon", "Strawberry", "Apple", "Sweet"],
+    bestFor: ["Edible Beginners", "Mild Experience"],
+    keywords: ["gummy edible", "multi flavour gummies", "10mg thc edibles", "sweet edibles", "sweet gummies"],
+    url: "https://www.oneplant.ca/locations/toronto-kensington#/product/5989/",
+    img: "https://oneplant-new-waio-app.b-cdn.net/media/91280d5b8410/9a/b4/f1/84/9ab4f184-37b3-4155-bb0e-69a7a41b4ce5.jpg"
+  },
+  {
+    id: 5,
+    name: "Mandarin Cookies (28g)",
+    type: "sativa",
+    grams: 28,
+    price: 99.99,
+    category: "Dried Flower",
+    tags: ["flower", "sale", "bundle"],
+    desc: "Back Forty | 28g | THC: 25–31%",
+    thcLevel: 28,
+    cbdLevel: 0.1,
+    terpenes: ["Limonene", "Caryophyllene", "Myrcene"],
+    reportedEffects: ["Uplifted", "Creative", "Relaxed"],
+    flavourNotes: ["Mandarin", "Spicy", "Earthy"],
+    bestFor: ["Bulk Sativa", "Productivity", "Creativity"],
+    keywords: ["mandarin cookies ounce", "back forty", "bulk flower sativa"],
+    url: "https://www.oneplant.ca/locations/toronto-kensington#/product/6040/",
+    img: "https://oneplant-new-waio-app.b-cdn.net/media/f/04/7d/71/b5/047d71b5-86a6-4ae7-a5cf-16e50f374f8f.jpg"
+  },
+  {    
+    id: 6,
+    name: "Panda Puff",
+    type: "indica",
+    grams: 28,
+    price: 104.76,
+    category: "Dried Flower",
+    tags: ["flower", "plant perks", "relax"],
+    desc: "Back Forty | 28g | THC: 24–30% | CBD: 1%",
+    thcLevel: 27,
+    cbdLevel: 1,
+    terpenes: ["Myrcene", "Caryophyllene", "Linalool"],
+    reportedEffects: ["Relaxed", "Calm", "Euphoric"],
+    flavourNotes: ["Sweet", "Earthy", "Spicy"],
+    bestFor: ["Nighttime", "Wind Down", "Anxiety"],
+    keywords: ["panda puff", "relaxing indica", "plant perks", "indica ounce"],
+    url: "https://www.oneplant.ca/locations/toronto-kensington#/product/6042/",
+    img: "https://oneplant-new-waio-app.b-cdn.net/media/f/3b/9f/d0/ec/3b9fd0ec-4045-43c3-beb9-c0856c70aa0f.jpg"
+  },
+  {
+    id: 7,
+    name: "Redecan Gems 5:0 Capsules",
+    type: "hybrid",
+    price: 13.44,
+    category: "Capsules",
+    tags: ["capsules", "softgel", "mild-thc", "relax"],
+    desc: "15 softgels | 4–6mg THC each | CBD: 1mg | Ethanol-extracted hybrid MCT formula.",
+    thcLevel: 5,
+    cbdLevel: 1,
+    terpenes: ["None (Extracted Capsules)"],
+    reportedEffects: ["Mild", "Balanced", "Steady Onset"],
+    flavourNotes: ["Neutral"],
+    bestFor: ["Discreet Use", "Beginner"],
+    keywords: ["redecan gems", "5:0 capsules", "hybrid softgels", "mild thc caps"],
+    url: "https://www.oneplant.ca/locations/toronto-kensington#/product/6353/",
+    img: "https://oneplant-new-waio-app.b-cdn.net/media/f/45/95/c9/50/4595c950-1031-4a54-a387-d70bf573f570.png"
+  },
+  {
+    id: 8,
+    name: "CBD GEMS + 15 Caps",
+    type: "blend",
+    price: 36.15,
+    category: "Capsules",
+    tags: ["capsules", "high-cbd", "softgel"],
+    desc: "15 caps | 1.5% THC | 2.2% CBD | 30mg CBD per cap | CO2-extracted, MCT oil base.",
+    thcLevel: 1.5,
+    cbdLevel: 30,
+    terpenes: ["None (CO2 extract)"],
+    reportedEffects: ["Calm", "Clear Headed", "Non-intoxicating"],
+    flavourNotes: ["Neutral"],
+    bestFor: ["Daily Use", "CBD Relief", "Non-psychoactive"],
+    keywords: ["cbd gems", "high cbd capsules", "softgel cbd", "non intoxicating"],
+    url: "https://www.oneplant.ca/locations/toronto-kensington#/product/6355/",
+    img: "https://oneplant-new-waio-app.b-cdn.net/media/f/69/b8/e3/8b/69b8e38b-7f3f-4f2b-8d6b-098f75b4b2b3.jpg"
+  },
+  {
+    id: 9,
+    name: "Redecan CBD Reign Drops",
+    type: "blend",
+    price: 16.55,
+    category: "Oils and Sprays",
+    tags: ["oil", "cbd", "low-thc"],
+    desc: "30ml bottle | 57mg THC | 384–471mg CBD | CO2-extracted, MCT formula for ingestion only.",
+    thcLevel: 2,
+    cbdLevel: 30,
+    terpenes: ["None (Oil Extract)"],
+    reportedEffects: ["Calm", "Relief", "Steady"],
+    flavourNotes: ["Neutral", "MCT"],
+    bestFor: ["Daytime CBD", "Microdosing", "Oil-based"],
+    keywords: ["redecan reign", "cbd oil", "low thc drops", "tincture style cbd"],
+    url: "https://www.oneplant.ca/locations/toronto-kensington#/product/6359/",
+    img: "https://oneplant-new-waio-app.b-cdn.net/media/f/b5/09/23/7d/b509237d-3adf-47f9-ae0f-bd701b74312a.jpg"
   }
- document.getElementById('userInput').addEventListener('keydown', function(e) {
+];
+
+// Emoji tagging map
+const effectsMap = {
+  "indica": "🌙", "sativa": "🌞", "hybrid": "🌀", "blend": "🧬",
+  "pre-roll": "🚬", "edible": "🍬", "gummy": "🧸", "capsules": "💊",
+  "oil": "🛢", "cbd": "🧘", "banana": "🍌", "citrus": "🍋",
+  "sweet": "🍭", "relax": "😌", "energize": "⚡", "sale": "🔥",
+  "fruity": "🍓", "multi-flavour": "🌈", "high-thc": "🔥", "bundle": "📦"
+};
+
+// Terpene information database
+const terpeneDatabase = {
+  limonene: {
+    name: "Limonene",
+    icon: "🍋",
+    description: "Citrusy aroma found in citrus fruit peels. May help elevate mood and provide stress relief.",
+    effects: ["Elevated mood", "Stress relief", "Anti-anxiety"],
+    commonIn: ["Citrus-flavored strains", "Sativa-dominant hybrids"],
+    flavors: ["Citrus", "Orange", "Lemon"]
+  },
+  myrcene: {
+    name: "Myrcene",
+    icon: "🌿",
+    description: "Earthy, musky aroma found in mangoes and hops. Often associated with sedative effects.",
+    effects: ["Relaxation", "Sedation", "Sleep aid"],
+    commonIn: ["Indica strains", "Many hybrid varieties"],
+    flavors: ["Earthy", "Musky", "Herbal"]
+  },
+  caryophyllene: {
+    name: "Caryophyllene",
+    icon: "🌶️",
+    description: "Spicy, peppery aroma found in black pepper and cloves. The only terpene known to interact with the endocannabinoid system.",
+    effects: ["Anti-inflammatory", "Pain relief", "Stress reduction"],
+    commonIn: ["Spicy strains", "Many hybrid and indica varieties"],
+    flavors: ["Spicy", "Peppery", "Woody"]
+  },
+  pinene: {
+    name: "Pinene",
+    icon: "🌲",
+    description: "Fresh pine aroma found in pine needles and rosemary. May help with mental alertness and memory.",
+    effects: ["Mental alertness", "Memory retention", "Focus"],
+    commonIn: ["Pine-scented strains", "Many sativa varieties"],
+    flavors: ["Pine", "Woody", "Herbal"]
+  },
+  linalool: {
+    name: "Linalool",
+    icon: "💜",
+    description: "Floral, lavender aroma. Known for calming and anxiety-reducing properties.",
+    effects: ["Calming", "Anti-anxiety", "Sedative"],
+    commonIn: ["Lavender-scented strains", "Many indica varieties"],
+    flavors: ["Floral", "Lavender", "Sweet"]
+  },
+  terpinolene: {
+    name: "Terpinolene",
+    icon: "🌼",
+    description: "Fresh, floral aroma with hints of pine and citrus. Often found in uplifting strains.",
+    effects: ["Uplifting", "Energetic", "Creative"],
+    commonIn: ["Jack Haze", "Dutch Treat", "Many sativa varieties"],
+    flavors: ["Floral", "Herbal", "Citrus"]
+  }
+};
+
+// Helper functions
+function extractTHC(desc) {
+  const match = desc.match(/THC[: ]*([\d.–]+%)/i);
+  return match ? match[1] : "Varies";
+}
+
+function extractCBD(desc) {
+  const match = desc.match(/CBD[: ]*([\d.–]+%|[\d]+mg)/i);
+  return match ? `<p><strong>CBD:</strong> ${match[1]}</p>` : "";
+}
+
+// Chatbot functionality
+const messages = document.getElementById('messages');
+const input = document.getElementById('userInput');
+const quickRepliesContainer = document.getElementById('quick-replies');
+
+const replies = [
+  '🌙 Cheap Indica', '😌 Relaxing Hybrid', '💸 Under $12', '🔥 High THC',
+  '🧘 CBD Rich', '🍋 Citrus Flavour', '🍬 Edibles', '💨 Vapes',
+  '🚬 Pre-rolls', '🥤 Beverages', '💊 Capsules', '🛢 Oils',
+  '😴 Sleep', '⚡ Energizing', '🍭 Sweet',
+  '🍋 What is Limonene?', '🌿 What is Myrcene?', '🌶 What is Caryophyllene?'
+];
+
+let isExpanded = false;
+// Store pending terpene info globally
+let pendingTerpene = null;
+// Store saved products
+let savedProducts = [];
+// Store products to compare
+let compareProducts = [];
+// Store conversation context
+let conversationContext = {
+  lastQuery: '',
+  lastProducts: [],
+  preferences: {
+    preferredType: null,
+    preferredEffects: [],
+    priceRange: null
+  }
+};
+
+function toggleChatWidget() {
+  const widget = document.getElementById("chat-widget");
+  widget.style.display = widget.style.display === "flex" ? "none" : "flex";
+  widget.style.flexDirection = "column";
+  setTimeout(() => document.getElementById("userInput").focus(), 150);
+}
+
+function renderQuickReplies() {
+  quickRepliesContainer.innerHTML = '';
+  const visibleReplies = isExpanded ? replies : replies.slice(0, 6);
+  visibleReplies.forEach(text => {
+    const btn = document.createElement('button');
+    btn.textContent = text;
+    btn.onclick = () => handleQuick(text);
+    quickRepliesContainer.appendChild(btn);
+  });
+
+  const toggleBtn = document.createElement('button');
+  toggleBtn.textContent = isExpanded ? 'Show Less' : 'More Options';
+  toggleBtn.onclick = () => {
+    isExpanded = !isExpanded;
+    renderQuickReplies();
+  };
+  quickRepliesContainer.appendChild(toggleBtn);
+}
+
+renderQuickReplies();
+
+input.addEventListener('keydown', function(e) {
   if (e.key === 'Enter') handleSend();
   if (e.key === 'Escape') document.getElementById('chat-widget').style.display = 'none';
 });
+
+function addMessage(text, sender = 'bot') {
+  const div = document.createElement('div');
+  div.className = sender === 'bot' ? 'bot-message' : 'user-message';
+  div.innerHTML = text;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function showTypingIndicator() {
+  const indicator = document.createElement('div');
+  indicator.className = 'typing-indicator';
+  indicator.innerHTML = '<span></span><span></span><span></span>';
+  indicator.id = 'typing-indicator';
+  messages.appendChild(indicator);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function removeTypingIndicator() {
+  const indicator = document.getElementById('typing-indicator');
+  if (indicator) indicator.remove();
+}
+
+function showProductCard(product) {
+  const card = document.createElement('div');
+  card.className = 'product-card';
+  
+  // Get emoji tags for the product
+  const emojiTags = product.tags
+    .map(tag => effectsMap[tag] || "")
+    .filter(Boolean)
+    .join(" ");
+  
+  // Create type badge
+  const typeBadge = `<span class="product-badge badge-${product.type.toLowerCase()}">${product.type}</span>`;
+  
+  // Create THC/CBD badges
+  const thcBadge = product.thcLevel > 0 ? 
+    `<span class="product-badge badge-thc">THC ${product.thcLevel}%</span>` : '';
+  const cbdBadge = product.cbdLevel > 0 ? 
+    `<span class="product-badge badge-cbd">CBD ${product.cbdLevel}${product.cbdLevel > 10 ? 'mg' : '%'}</span>` : '';
+  
+  // Create effects tags
+  const effectsTags = product.reportedEffects ? 
+    `<div class="effects-tags">
+      ${product.reportedEffects.map(effect => `<span class="effect-tag">${effect}</span>`).join('')}
+    </div>` : '';
+  
+  // Check if product is saved
+  const isSaved = savedProducts.some(p => p.id === product.id);
+  
+  card.innerHTML = `
+    <img src="${product.img}" alt="${product.name}" />
+    <div class="product-info">
+      <h4>${emojiTags} ${product.name}</h4>
+      <div>${typeBadge} ${thcBadge} ${cbdBadge}</div>
+      <p><strong>Price:</strong> $${product.price.toFixed(2)} ${product.grams ? '/ ' + product.grams + 'g' : ''}</p>
+      <p><strong>Terpenes:</strong> ${product.terpenes?.join(', ') || "N/A"}</p>
+      ${effectsTags}
+      <p>${product.desc}</p>
+      <div class="product-actions">
+        <button onclick="saveProduct(${product.id})">${isSaved ? '✓ Saved' : '+ Save'}</button>
+        <button onclick="addToCompare(${product.id})">Compare</button>
+        <button onclick="showProductDetails(${product.id})">Details</button>
+        ${product.url ? `<a href="${product.url}" target="_blank">View ↗</a>` : ""}
+      </div>
+    </div>
+  `;
+  messages.appendChild(card);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function saveProduct(productId) {
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+  
+  // Check if already saved
+  const existingIndex = savedProducts.findIndex(p => p.id === productId);
+  if (existingIndex >= 0) {
+    // Remove if already saved
+    savedProducts.splice(existingIndex, 1);
+    addMessage(`Removed ${product.name} from your saved products.`);
+  } else {
+    // Add to saved products
+    savedProducts.push(product);
+    addMessage(`Added ${product.name} to your saved products! You can view all saved products by typing "show saved" anytime.`);
+  }
+  
+  // Update any existing product cards
+  updateProductCards();
+}
+
+function updateProductCards() {
+  // Update save buttons on all product cards
+  document.querySelectorAll('.product-card').forEach(card => {
+    const productNameElement = card.querySelector('h4');
+    if (!productNameElement) return;
+    
+    const productName = productNameElement.textContent.replace(/^[\s🌿🌙🌞🌀🧬🚬🍬🧸💊🛢🧘🍌🍋🍭😌⚡🔥🍓🌈📦]+/, '').trim();
+    const product = products.find(p => p.name === productName);
+    if (!product) return;
+    
+    const saveButton = card.querySelector('button');
+    if (saveButton && saveButton.textContent.includes('Save')) {
+      const isSaved = savedProducts.some(p => p.id === product.id);
+      saveButton.textContent = isSaved ? '✓ Saved' : '+ Save';
+    }
+  });
+}
+
+function showSavedProducts() {
+  if (savedProducts.length === 0) {
+    addMessage("You haven't saved any products yet. Click the '+ Save' button on any product to save it for later.");
+    return;
+  }
+  
+  addMessage(`You have ${savedProducts.length} saved products:`);
+  savedProducts.forEach(showProductCard);
+}
+
+function addToCompare(productId) {
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+  
+  // Check if already in compare list
+  const existingIndex = compareProducts.findIndex(p => p.id === productId);
+  if (existingIndex >= 0) {
+    // Remove if already in list
+    compareProducts.splice(existingIndex, 1);
+    addMessage(`Removed ${product.name} from comparison.`);
+  } else {
+    // Add to compare list (max 2)
+    if (compareProducts.length >= 2) {
+      compareProducts.shift(); // Remove oldest
+    }
+    compareProducts.push(product);
+    
+    if (compareProducts.length === 2) {
+      showComparison();
+    } else {
+      addMessage(`Added ${product.name} to comparison. Add one more product to compare them side by side.`);
+    }
+  }
+}
+
+function showComparison() {
+  if (compareProducts.length !== 2) {
+    addMessage("Select two products to compare them side by side.");
+    return;
+  }
+  
+  const [product1, product2] = compareProducts;
+  
+  const comparisonDiv = document.createElement('div');
+  comparisonDiv.className = 'product-comparison';
+  comparisonDiv.innerHTML = `
+    <div class="comparison-header">Product Comparison</div>
+    
+    <div class="comparison-product">
+      <h5>${product1.name}</h5>
+      <p><strong>Type:</strong> ${product1.type}</p>
+      <p><strong>THC:</strong> ${product1.thcLevel}%</p>
+      <p><strong>CBD:</strong> ${product1.cbdLevel}${product1.cbdLevel > 10 ? 'mg' : '%'}</p>
+      <p><strong>Price:</strong> $${product1.price.toFixed(2)}</p>
+      <p><strong>Effects:</strong> ${product1.reportedEffects.join(', ')}</p>
+    </div>
+    
+    <div class="comparison-product">
+      <h5>${product2.name}</h5>
+      <p><strong>Type:</strong> ${product2.type}</p>
+      <p><strong>THC:</strong> ${product2.thcLevel}%</p>
+      <p><strong>CBD:</strong> ${product2.cbdLevel}${product2.cbdLevel > 10 ? 'mg' : '%'}</p>
+      <p><strong>Price:</strong> $${product2.price.toFixed(2)}</p>
+      <p><strong>Effects:</strong> ${product2.reportedEffects.join(', ')}</p>
+    </div>
+  `;
+  
+  messages.appendChild(comparisonDiv);
+  messages.scrollTop = messages.scrollHeight;
+  
+  // Add recommendation based on comparison
+  let recommendation = "";
+  if (product1.type !== product2.type) {
+    recommendation = `<strong>${product1.name}</strong> is a ${product1.type} while <strong>${product2.name}</strong> is a ${product2.type}. `;
+    recommendation += product1.type === "sativa" ? 
+      `${product1.name} may be better for daytime use, while ${product2.name} might be preferred for evening relaxation.` :
+      `${product2.name} may be better for daytime use, while ${product1.name} might be preferred for evening relaxation.`;
+  } else if (Math.abs(product1.thcLevel - product2.thcLevel) > 5) {
+    const stronger = product1.thcLevel > product2.thcLevel ? product1.name : product2.name;
+    const milder = product1.thcLevel > product2.thcLevel ? product2.name : product1.name;
+    recommendation = `<strong>${stronger}</strong> has significantly higher THC content, so it may produce stronger effects. <strong>${milder}</strong> might be better for those seeking a milder experience.`;
+  } else {
+    recommendation = `Both products are similar in type and potency. <strong>${product1.name}</strong> offers ${product1.flavourNotes.join(', ')} flavors, while <strong>${product2.name}</strong> has ${product2.flavourNotes.join(', ')} notes.`;
+  }
+  
+  addMessage(`<strong>Comparison:</strong> ${recommendation}`);
+  
+  // Reset comparison after showing
+  compareProducts = [];
+}
+
+function showProductDetails(productId) {
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+  
+  // Find terpene info for the main terpene
+  const mainTerpene = product.terpenes[0]?.toLowerCase();
+  let terpeneInfo = '';
+  
+  if (mainTerpene && terpeneDatabase[mainTerpene.toLowerCase()]) {
+    const terpData = terpeneDatabase[mainTerpene.toLowerCase()];
+    terpeneInfo = `
+      <div class="terpene-info">
+        <div class="terpene-icon">${terpData.icon}</div>
+        <div class="terpene-details">
+          <h5>${terpData.name}</h5>
+          <p>${terpData.description}</p>
+        </div>
+      </div>
+    `;
+  }
+  
+  const detailsMessage = `
+    <strong>${product.name} Details:</strong><br>
+    <p>Category: ${product.category} | Type: ${product.type}</p>
+    <p>THC: ${product.thcLevel}% | CBD: ${product.cbdLevel}${product.cbdLevel > 10 ? 'mg' : '%'}</p>
+    <p>Price: $${product.price.toFixed(2)}${product.grams ? ' / ' + product.grams + 'g' : ''}</p>
+    <p>Best for: ${product.bestFor.join(', ')}</p>
+    <p>Flavour notes: ${product.flavourNotes.join(', ')}</p>
+    ${terpeneInfo}
+  `;
+  
+  addMessage(detailsMessage);
+  
+  // Update conversation context
+  conversationContext.lastProducts = [product];
+}
+
+function handleQuick(text) {
+  input.value = text;
+  handleSend();
+}
+
+function handleSend() {
+  const query = input.value.trim();
+  if (!query) return;
+  addMessage(query, 'user');
+  
+  // Show typing indicator
+  showTypingIndicator();
+  
+  // Simulate processing time for a more natural feel
+  setTimeout(() => {
+    removeTypingIndicator();
+    respondTo(query);
+  }, 800);
+  
+  input.value = '';
+}
+
+function respondTo(query) {
+  const normalized = query.toLowerCase();
+  
+  // Update conversation context
+  conversationContext.lastQuery = normalized;
+  
+  // Check for saved products request
+  if (normalized.includes("saved") || normalized.includes("my products")) {
+    showSavedProducts();
+    return;
+  }
+  
+  // Check for comparison request
+  if (normalized.includes("compare")) {
+    if (compareProducts.length === 2) {
+      showComparison();
+    } else if (conversationContext.lastProducts.length >= 2) {
+      // Use last viewed products for comparison
+      compareProducts = conversationContext.lastProducts.slice(0, 2);
+      showComparison();
+    } else {
+      addMessage("Select two products to compare by clicking the 'Compare' button on any product card.");
+    }
+    return;
+  }
+
+  // Terpene educational layer
+  if (normalized.includes("terpenes") || normalized.includes("terps")) {
+    const terpeneEducation = `
+      <strong>About Terpenes:</strong><br>
+      Terpenes are aromatic compounds found in cannabis and many other plants. They give cannabis its distinctive smell and taste, and may also influence its effects.<br><br>
+      <strong>Common Cannabis Terpenes:</strong><br>
+      🍋 <strong>Limonene</strong> - Citrusy aroma, may help elevate mood<br>
+      🌿 <strong>Myrcene</strong> - Earthy aroma, often associated with relaxation<br>
+      🌶️ <strong>Caryophyllene</strong> - Spicy, peppery aroma, may help with stress<br>
+      🌲 <strong>Pinene</strong> - Pine aroma, may promote alertness<br>
+      💜 <strong>Linalool</strong> - Floral aroma, may have calming effects<br><br>
+      Ask about any specific terpene to learn more!
+    `;
+    addMessage(terpeneEducation);
+    return;
+  }
+
+  // Check for specific terpene information requests
+  for (const [terpName, terpData] of Object.entries(terpeneDatabase)) {
+    if (normalized.includes(terpName.toLowerCase())) {
+      const terpeneDetailedInfo = `
+        <div class="terpene-info">
+          <div class="terpene-icon">${terpData.icon}</div>
+          <div class="terpene-details">
+            <h5>${terpData.name}</h5>
+            <p>${terpData.description}</p>
+            <p><strong>Potential effects:</strong> ${terpData.effects.join(', ')}</p>
+            <p><strong>Common in:</strong> ${terpData.commonIn.join(', ')}</p>
+            <p><strong>Flavor profile:</strong> ${terpData.flavors.join(', ')}</p>
+          </div>
+        </div>
+        <p>Would you like to see products containing ${terpData.name}?</p>
+      `;
+      
+      addMessage(terpeneDetailedInfo);
+      pendingTerpene = terpName;
+      return;
+    }
+  }
+
+  // Handle pending terpene response
+  if (pendingTerpene && (normalized.includes("yes") || normalized.includes("sure") || normalized === "y")) {
+    const terpName = pendingTerpene;
+    pendingTerpene = null;
+    
+    const filtered = products.filter(p =>
+      p.terpenes && p.terpenes.some(t => t.toLowerCase() === terpName.toLowerCase())
+    );
+
+    if (filtered.length) {
+      addMessage(`Here are products containing ${terpeneDatabase[terpName].name}:`);
+      filtered.forEach(showProductCard);
+      
+      // Update conversation context
+      conversationContext.lastProducts = filtered;
+    } else {
+      addMessage(`I couldn't find any products tagged with ${terpeneDatabase[terpName].name} yet. Want to try something else like "chill pre-roll" or "under $25"?`);
+    }
+    return;
+  }
+
+  // Handle "Sweet" specifically
+  if (normalized.includes("sweet")) {
+    const sweetProducts = products.filter(p => 
+      p.tags?.some(t => t.toLowerCase() === "sweet") || 
+      p.flavourNotes?.some(f => f.toLowerCase() === "sweet") ||
+      p.keywords?.some(k => k.toLowerCase().includes("sweet")) ||
+      p.desc.toLowerCase().includes("sweet")
+    );
+    
+    if (sweetProducts.length > 0) {
+      addMessage(`Here are products with sweet flavors:`);
+      sweetProducts.forEach(showProductCard);
+      
+      // Update conversation context
+      conversationContext.lastProducts = sweetProducts;
+      conversationContext.preferences.preferredEffects.push("sweet");
+      return;
+    }
+  }
+
+  // Handle "Relaxing Hybrid" specifically
+  if (normalized.includes("relaxing hybrid")) {
+    const relaxingHybrids = products.filter(p => 
+      p.type.toLowerCase() === "hybrid" && 
+      (p.reportedEffects?.some(e => e.toLowerCase().includes("relax")) || 
+       p.tags?.some(t => t.toLowerCase().includes("relax")))
+    );
+    
+    if (relaxingHybrids.length > 0) {
+      addMessage(`Here are relaxing hybrid products:`);
+      relaxingHybrids.forEach(showProductCard);
+      
+      // Update conversation context
+      conversationContext.lastProducts = relaxingHybrids;
+      conversationContext.preferences.preferredType = "hybrid";
+      conversationContext.preferences.preferredEffects.push("relaxing");
+    } else {
+      // If no exact matches, find any hybrid
+      const anyHybrids = products.filter(p => p.type.toLowerCase() === "hybrid");
+      if (anyHybrids.length > 0) {
+        addMessage(`I couldn't find specifically relaxing hybrids, but here are some hybrid products:`);
+        anyHybrids.forEach(showProductCard);
+        
+        // Update conversation context
+        conversationContext.lastProducts = anyHybrids;
+        conversationContext.preferences.preferredType = "hybrid";
+      } else {
+        addMessage(`I couldn't find any hybrid products. Would you like to see some indica products that are relaxing instead?`);
+      }
+    }
+    return;
+  }
+
+  // Direct product match
+  const directMatches = matchProductToQuery(normalized);
+  if (directMatches.length > 0) {
+    addMessage(`Here's what I found for "${query}":`);
+    directMatches.forEach(showProductCard);
+    
+    // Update conversation context
+    conversationContext.lastProducts = directMatches;
+    return;
+  }
+
+  // Price filtering
+  const priceMatch = normalized.match(/under\s*\$?(\d+)/i);
+  if (priceMatch) {
+    const maxPrice = parseFloat(priceMatch[1]);
+    const affordableProducts = products.filter(p => p.price <= maxPrice);
+    
+    if (affordableProducts.length > 0) {
+      addMessage(`Here are products under $${maxPrice}:`);
+      affordableProducts.forEach(showProductCard);
+      
+      // Update conversation context
+      conversationContext.lastProducts = affordableProducts;
+      conversationContext.preferences.priceRange = {max: maxPrice};
+      return;
+    }
+  }
+
+  // Category filtering
+  const categories = ["dried flower", "pre-rolls", "edibles", "capsules", "oils and sprays"];
+  for (const category of categories) {
+    if (normalized.includes(category.toLowerCase())) {
+      const categoryProducts = products.filter(p => 
+        p.category.toLowerCase() === category.toLowerCase() || 
+        p.category.toLowerCase().includes(category.toLowerCase())
+      );
+      
+      if (categoryProducts.length > 0) {
+        addMessage(`Here are our ${category} products:`);
+        categoryProducts.forEach(showProductCard);
+        
+        // Update conversation context
+        conversationContext.lastProducts = categoryProducts;
+        return;
+      }
+    }
+  }
+
+  // Type filtering (indica, sativa, hybrid)
+  const types = ["indica", "sativa", "hybrid", "blend"];
+  for (const type of types) {
+    if (normalized.includes(type)) {
+      const typeProducts = products.filter(p => p.type.toLowerCase() === type);
+      
+      if (typeProducts.length > 0) {
+        addMessage(`Here are our ${type} products:`);
+        typeProducts.forEach(showProductCard);
+        
+        // Update conversation context
+        conversationContext.lastProducts = typeProducts;
+        conversationContext.preferences.preferredType = type;
+        return;
+      }
+    }
+  }
+
+  // Effect/flavor filtering
+  const effects = ["relax", "sleep", "energize", "focus", "creative", "chill"];
+  for (const effect of effects) {
+    if (normalized.includes(effect)) {
+      const effectProducts = products.filter(p => 
+        p.reportedEffects?.some(e => e.toLowerCase().includes(effect)) ||
+        p.tags?.some(t => t.toLowerCase().includes(effect)) ||
+        p.keywords?.some(k => k.toLowerCase().includes(effect))
+      );
+      
+      if (effectProducts.length > 0) {
+        addMessage(`Here are products for ${effect}:`);
+        effectProducts.forEach(showProductCard);
+        
+        // Update conversation context
+        conversationContext.lastProducts = effectProducts;
+        conversationContext.preferences.preferredEffects.push(effect);
+        return;
+      }
+    }
+  }
+
+  // THC/CBD content filtering
+  const highTHC = normalized.includes("high thc") || normalized.includes("strong") || normalized.includes("potent");
+  const highCBD = normalized.includes("high cbd") || normalized.includes("cbd rich");
+  
+  if (highTHC) {
+    const thcProducts = products.filter(p => p.thcLevel >= 20);
+    
+    if (thcProducts.length > 0) {
+      addMessage(`Here are products with high THC content (20%+):`);
+      thcProducts.forEach(showProductCard);
+      
+      // Update conversation context
+      conversationContext.lastProducts = thcProducts;
+      return;
+    }
+  }
+  
+  if (highCBD) {
+    const cbdProducts = products.filter(p => p.cbdLevel >= 10 || p.tags?.includes("cbd"));
+    
+    if (cbdProducts.length > 0) {
+      addMessage(`Here are products with significant CBD content:`);
+      cbdProducts.forEach(showProductCard);
+      
+      // Update conversation context
+      conversationContext.lastProducts = cbdProducts;
+      return;
+    }
+  }
+
+  // Try to understand natural language queries
+  if (normalized.includes("help me") || normalized.includes("recommend") || normalized.includes("suggest")) {
+    // Check for specific needs in the query
+    let needsRelaxation = normalized.includes("relax") || normalized.includes("stress") || normalized.includes("anxiety");
+    let needsEnergy = normalized.includes("energy") || normalized.includes("focus") || normalized.includes("productive");
+    let needsSleep = normalized.includes("sleep") || normalized.includes("insomnia") || normalized.includes("night");
+    
+    if (needsRelaxation) {
+      const relaxProducts = products.filter(p => 
+        p.reportedEffects?.some(e => ["relaxed", "calm", "euphoric"].includes(e.toLowerCase())) ||
+        p.tags?.some(t => t.toLowerCase().includes("relax"))
+      );
+      
+      if (relaxProducts.length > 0) {
+        addMessage(`Based on your needs, here are some products that may help with relaxation:`);
+        relaxProducts.slice(0, 3).forEach(showProductCard);
+        return;
+      }
+    }
+    
+    if (needsEnergy) {
+      const energyProducts = products.filter(p => 
+        p.reportedEffects?.some(e => ["energetic", "focused", "creative", "uplifted"].includes(e.toLowerCase())) ||
+        p.tags?.some(t => t.toLowerCase().includes("energize"))
+      );
+      
+      if (energyProducts.length > 0) {
+        addMessage(`Based on your needs, here are some products that may help with energy and focus:`);
+        energyProducts.slice(0, 3).forEach(showProductCard);
+        return;
+      }
+    }
+    
+    if (needsSleep) {
+      const sleepProducts = products.filter(p => 
+        p.reportedEffects?.some(e => ["sleepy", "sedative", "relaxed"].includes(e.toLowerCase())) ||
+        p.type.toLowerCase() === "indica"
+      );
+      
+      if (sleepProducts.length > 0) {
+        addMessage(`Based on your needs, here are some products that may help with sleep:`);
+        sleepProducts.slice(0, 3).forEach(showProductCard);
+        return;
+      }
+    }
+    
+    // General recommendation based on conversation context
+    if (conversationContext.preferences.preferredType || conversationContext.preferences.preferredEffects.length > 0) {
+      addMessage("Based on your previous interests, you might like these products:");
+      
+      const personalizedProducts = products.filter(p => {
+        if (conversationContext.preferences.preferredType && p.type.toLowerCase() === conversationContext.preferences.preferredType) {
+          return true;
+        }
+        if (conversationContext.preferences.preferredEffects.length > 0) {
+          return conversationContext.preferences.preferredEffects.some(effect => 
+            p.reportedEffects?.some(e => e.toLowerCase().includes(effect)) ||
+            p.tags?.some(t => t.toLowerCase().includes(effect))
+          );
+        }
+        return false;
+      });
+      
+      if (personalizedProducts.length > 0) {
+        personalizedProducts.slice(0, 3).forEach(showProductCard);
+        return;
+      }
+    }
+  }
+
+  // Fallback response with personalized suggestions
+  addMessage("I couldn't find exactly what you're looking for. Here are some popular products that might interest you:");
+  
+  // Try to personalize the fallback based on conversation context
+  let fallbackProducts = [];
+  
+  if (conversationContext.preferences.preferredType) {
+    fallbackProducts = products.filter(p => p.type.toLowerCase() === conversationContext.preferences.preferredType);
+  } else if (conversationContext.preferences.preferredEffects.length > 0) {
+    const effect = conversationContext.preferences.preferredEffects[0];
+    fallbackProducts = products.filter(p => 
+      p.reportedEffects?.some(e => e.toLowerCase().includes(effect)) ||
+      p.tags?.some(t => t.toLowerCase().includes(effect))
+    );
+  }
+  
+  // If no personalized fallbacks, use popular products
+  if (fallbackProducts.length === 0) {
+    fallbackProducts = products.slice(0, 3);
+  }
+  
+  fallbackProducts.slice(0, 3).forEach(showProductCard);
+  
+  // Suggest alternative queries
+  addMessage("You can also try asking more specific questions like 'show me indica pre-rolls' or 'what products help with sleep?'");
+}
+
+function matchProductToQuery(input) {
+  // Enhanced product matching with relevance scoring
+  return products.filter(p => {
+    // Direct name match
+    if (p.name.toLowerCase().includes(input)) return true;
+    
+    // Tag match
+    if (p.tags?.some(tag => input.includes(tag.toLowerCase()))) return true;
+    
+    // Keyword match
+    if (p.keywords?.some(kw => input.includes(kw.toLowerCase()))) return true;
+    
+    // Category match
+    if (p.category.toLowerCase().includes(input)) return true;
+    
+    // Type match
+    if (p.type.toLowerCase() === input) return true;
+    
+    // Effect match
+    if (p.reportedEffects?.some(effect => input.includes(effect.toLowerCase()))) return true;
+    
+    // Flavor match
+    if (p.flavourNotes?.some(flavor => input.includes(flavor.toLowerCase()))) return true;
+    
+    return false;
+  }).sort((a, b) => {
+    // Sort by relevance (name matches first, then tags, etc.)
+    const aNameMatch = a.name.toLowerCase().includes(input) ? 10 : 0;
+    const bNameMatch = b.name.toLowerCase().includes(input) ? 10 : 0;
+    
+    const aTagMatch = a.tags?.some(tag => input.includes(tag.toLowerCase())) ? 5 : 0;
+    const bTagMatch = b.tags?.some(tag => input.includes(tag.toLowerCase())) ? 5 : 0;
+    
+    return (bNameMatch + bTagMatch) - (aNameMatch + aTagMatch);
+  });
+}
 </script>
-<script src="products.js"></script>
-<script src="chatbot.js"></script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'959fab9f164638e4',t:'MTc1MTY0MzA5NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
